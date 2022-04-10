@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, useState } from "react";
+import Home from "./components/Home";
+import UserProfile from "./components/UserProfile";
 
 function App() {
+  let profile;
+  const [content, setContent] = useState(null);
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    setContent(null);
+  };
+  const getToken = (token) => {
+    setContent(token);
+  };
+  if (content === null) {
+    profile = <h1>Please, Log in</h1>;
+  } else {
+    profile = <UserProfile onLogout={logoutHandler} />;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <Home onToken={getToken} />
+      {profile}
+    </Fragment>
   );
 }
 
